@@ -1,0 +1,43 @@
+group 'com.pushwoosh.pushwoosh'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.3'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        minSdkVersion 17
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.0.1'
+    implementation 'com.google.firebase:firebase-messaging:21.0.1'
+    implementation 'com.pushwoosh:pushwoosh:6.6.9'
+    implementation "com.pushwoosh:pushwoosh-firebase:6.6.9"
+    implementation "com.pushwoosh:pushwoosh-huawei:6.6.9"
+    implementation 'com.pushwoosh:pushwoosh-badge:6.6.9'
+}
