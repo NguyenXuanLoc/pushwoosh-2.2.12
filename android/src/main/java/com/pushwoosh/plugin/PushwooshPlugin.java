@@ -141,7 +141,11 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
         Pushwoosh pushwooshInstance = Pushwoosh.getInstance();
         switch (call.method) {
             case "getPlatformVersion":
-                result.success("Android " + android.os.Build.VERSION.RELEASE);
+                try {
+                    result.success("Android " + android.os.Build.VERSION.RELEASE);
+                } catch (Exception ignored) {
+
+                }
                 break;
             case "initialize":
                 initialize(call, pushwooshInstance);
@@ -150,7 +154,10 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
                 enableHuaweiNotifications();
                 break;
             case "getInstance":
-                result.success(pushwooshInstance);
+                try {
+                    result.success(pushwooshInstance);
+                } catch (Exception ignore) {
+                }
                 break;
             case "registerForPushNotifications":
                 registerForPushNotifications(call, result);
@@ -159,10 +166,16 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
                 unregisterForPushNotifications(call, result);
                 break;
             case "getPushToken":
-                result.success(pushwooshInstance.getPushToken());
+                try {
+                    result.success(pushwooshInstance.getPushToken());
+                } catch (Exception e) {
+                }
                 break;
             case "getHWID":
-                result.success(pushwooshInstance.getHwid());
+                try {
+                    result.success(pushwooshInstance.getHwid());
+                } catch (Exception e) {
+                }
                 break;
             case "setTags":
                 setTags(call, result);
@@ -198,10 +211,16 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
                 setApplicationIconBadgeNumber(call, result);
                 break;
             case "getApplicationIconBadgeNumber":
-                result.success(PushwooshBadge.getBadgeNumber());
+                try {
+                    result.success(PushwooshBadge.getBadgeNumber());
+                } catch (Exception e) {
+                }
                 break;
             default:
-                result.notImplemented();
+                try {
+                    result.notImplemented();
+                } catch (Exception e) {
+                }
                 break;
         }
     }
@@ -276,7 +295,10 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
             @Override
             public void process(com.pushwoosh.function.Result<RegisterForPushNotificationsResultData, RegisterForPushNotificationsException> resultRequest) {
                 if (resultRequest.isSuccess() && resultRequest.getData() != null) {
-                    result.success(resultRequest.getData().getToken());
+                    try {
+                        result.success(resultRequest.getData().getToken());
+                    } catch (Exception e) {
+                    }
                 } else {
                     sendResultException(result, resultRequest.getException());
                 }
@@ -297,7 +319,10 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
             @Override
             public void process(com.pushwoosh.function.Result<String, UnregisterForPushNotificationException> resultRequest) {
                 if (resultRequest.isSuccess()) {
-                    result.success(resultRequest.getData());
+                    try {
+                        result.success(resultRequest.getData());
+                    } catch (Exception e) {
+                    }
                 } else {
                     sendResultException(result, resultRequest.getException());
                 }
@@ -326,7 +351,10 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
                                 mapParsed.put((String) pair.getKey(), pair.getValue());
                             }
                         }
-                        result.success(mapParsed);
+                        try {
+                            result.success(mapParsed);
+                        } catch (Exception e) {
+                        }
                     }
                 } else {
                     sendResultException(result, resultRequest.getException());
@@ -345,7 +373,10 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
             @Override
             public void process(com.pushwoosh.function.Result<Void, PushwooshException> resultRequest) {
                 if (resultRequest.isSuccess()) {
-                    result.success(null);
+                    try {
+                        result.success(null);
+                    } catch (Exception e) {
+                    }
                 } else {
                     sendResultException(result, resultRequest.getException());
                 }
@@ -355,7 +386,10 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
 
     private void showForegroundAlert(MethodCall call, Result result) {
         if (call.arguments == null) {
-            result.success(showForegroundPush);
+            try {
+                result.success(showForegroundPush);
+            } catch (Exception e) {
+            }
         } else {
             showForegroundPush = (Boolean) call.arguments;
         }
@@ -368,7 +402,10 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
         Map<String, Object> map = (Map<String, Object>) args.get(1);
         JSONObject jsonObject = new JSONObject(map);
         InAppManager.getInstance().postEvent(method, Tags.fromJson(jsonObject));
-        result.success(null);
+        try {
+            result.success(null);
+        } catch (Exception e) {
+        }
     }
 
     private void setMultiNotificationMode(MethodCall call) {
@@ -381,7 +418,9 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
     private void setUserId(MethodCall call, Result result) {
         try {
             Pushwoosh.getInstance().setUserId((String) call.argument("userId"));
-            result.success(null);
+            try {
+                result.success(null);
+            }catch (Exception e){}
         } catch (Exception e) {
             sendResultException(result, e);
         }
@@ -390,7 +429,9 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
     private void setLanguage(MethodCall call, Result result) {
         try {
             Pushwoosh.getInstance().setLanguage((String) call.argument("language"));
-            result.success(null);
+            try {
+                result.success(null);
+            }catch (Exception e){}
         } catch (Exception e) {
             sendResultException(result, e);
         }
@@ -399,7 +440,11 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
     private void setApplicationIconBadgeNumber(MethodCall call, Result result) {
         try {
             PushwooshBadge.setBadgeNumber((int) call.argument("badges"));
-            result.success(null);
+            try {
+                result.success(null);
+            }catch (Exception e){
+
+            }
         } catch (Exception e) {
             sendResultException(result, e);
         }
@@ -408,7 +453,11 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
     private void addToApplicationIconBadgeNumber(MethodCall call, Result result) {
         try {
             PushwooshBadge.setBadgeNumber((int) call.argument("badges"));
-            result.success(null);
+            try {
+                result.success(null);
+            }catch (Exception e){
+
+            }
         } catch (Exception e) {
             sendResultException(result, e);
         }
@@ -444,7 +493,11 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
 
         private void sendEvent(Map<String, Object> map, boolean fromBackground) {
             if (events != null) {
-                events.success(convertMap(map, fromBackground));
+                try {
+                    events.success(convertMap(map, fromBackground));
+                } catch (Exception e) {
+
+                }
             } else {
                 //flutter app is not initialized yet, so save push notification, we send it to listener later
                 startPushNotification = map;
@@ -488,7 +541,9 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
         public void onListen(Object arguments, EventChannel.EventSink events) {
             this.events = events;
             if (cachedDeepLink != null) {
-                events.success(cachedDeepLink);
+                try {
+                    events.success(cachedDeepLink);
+                }catch (Exception e){}
                 cachedDeepLink = null;
             }
         }
@@ -500,7 +555,11 @@ public class PushwooshPlugin implements MethodCallHandler, PluginRegistry.NewInt
 
         private void sendDeepLink(String deepLink) {
             if (events != null) {
-                events.success(deepLink);
+                try {
+                    events.success(deepLink);
+                } catch (Exception ignored) {
+
+                }
             } else {
                 //flutter app is not initialized yet, caching deep link to send it later
                 cachedDeepLink = deepLink;
